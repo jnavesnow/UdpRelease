@@ -38,6 +38,8 @@ jobs:
 
           brew install protobuf
 
+          brew install ninja
+
           cd ${{ github.workspace }}/GameNetworkingSockets
 
           mkdir build
@@ -64,7 +66,4 @@ jobs:
         with:
           name: ${{ matrix.os }}-${{ matrix.EVENT_MATRIX }}-build-failure-logs
           path: |
-            ${{ github.workspace }}/vcpkg/buildtrees/detect_compiler/*.log
-            ${{ github.workspace }}/vcpkg/buildtrees/gamenetworkingsockets/*.log
-            ${{ github.workspace }}/vcpkg/buildtrees/openssl/*.log
-            ${{ github.workspace }}/vcpkg/buildtrees/libsodium/*.log
+            ${{ github.workspace }}/GameNetworkingSockets/CMakeFiles
