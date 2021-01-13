@@ -1,0 +1,70 @@
+# Copyright (c) 2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+name: build-rudp-binaries-desktop-os
+on: [push]
+
+jobs:
+  job:
+    name: ${{ matrix.os }}-build-rudp-binaries-autocache
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest]
+        include:
+          - os: macos-latest
+            triplet: x64-osx
+
+    env:
+      buildDir: '${{ github.workspace }}/build/'
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      
+      - name: Cache Build
+        uses: actions/cache@v2
+        with:
+          path: build
+          key: ${{ matrix.os }}-${{ matrix.EVENT_MATRIX }}-v1
+
+      # Now that vcpkg is installed, it is being used to run with the desired arguments.
+      - name: install GameNetworkingSockets
+        run: |
+          brew install openssl
+          export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/openssl/lib/pkgconfig
+
+          brew install protobuf
+
+          cd ${{ github.workspace }}/GameNetworkingSockets
+
+          mkdir build
+
+          cd build
+
+          cmake -G Ninja ..
+
+          ninja
+        shell: bash
+
+
+      - name: upload GameNetworkingSockets (non Windows build)
+        uses: actions/upload-artifact@v2
+        if: "!failure() && !contains( matrix.os, 'windows')"
+        with:
+          name: ${{ matrix.os }}-${{ matrix.EVENT_MATRIX }}-build
+          path: ${{ github.workspace }}/GameNetworkingSockets/build
+
+      # upload artifact on failure
+      - name: upload failure logs (if failure)
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: ${{ matrix.os }}-${{ matrix.EVENT_MATRIX }}-build-failure-logs
+          path: |
+            ${{ github.workspace }}/vcpkg/buildtrees/detect_compiler/*.log
+            ${{ github.workspace }}/vcpkg/buildtrees/gamenetworkingsockets/*.log
+            ${{ github.workspace }}/vcpkg/buildtrees/openssl/*.log
+            ${{ github.workspace }}/vcpkg/buildtrees/libsodium/*.log
