@@ -46,7 +46,7 @@ jobs:
 
           cd build
 
-          cmake -G Ninja ..
+          cmake -G -DBUILD_SHARED_LIBS=OFF Ninja ..
 
           ninja
         shell: bash
