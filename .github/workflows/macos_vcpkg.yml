@@ -67,6 +67,20 @@ jobs:
       - name: install GameNetworkingSockets (non windows)
         if: "!contains( matrix.os, 'windows')"
         run: |
+          cd $VCPKG_ROOT
+
+          git apply --reverse --reject --whitespace=fix ../fix_ios_protobuf.patch
+
+          cd ${{ github.workspace }}/GameNetworkingSockets
+
+          brew install protobuf
+
+          git apply --reject --whitespace=fix ../mobile.patch
+
+          cd $VCPKG_ROOT
+          
+          git apply --reject --whitespace=fix ../fix_ios_protobuf.patch
+          
           $VCPKG_ROOT/vcpkg remove gamenetworkingsockets --triplet=${{ matrix.triplet }}
 
           $VCPKG_ROOT/vcpkg --overlay-ports=${{ github.workspace }}/GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets --triplet=${{ matrix.triplet }}

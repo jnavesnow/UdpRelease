@@ -1,0 +1,23 @@
+diff --git a/ports/protobuf/portfile.cmake b/ports/protobuf/portfile.cmake
+index a79a34ef8..754498fd5 100644
+--- a/ports/protobuf/portfile.cmake
++++ b/ports/protobuf/portfile.cmake
+@@ -9,17 +9,7 @@ vcpkg_from_github(
+         fix-default-proto-file-path.patch
+ )
+ 
+-if(CMAKE_HOST_WIN32 AND NOT VCPKG_TARGET_ARCHITECTURE MATCHES "x64" AND NOT VCPKG_TARGET_ARCHITECTURE MATCHES "x86")
+-    set(protobuf_BUILD_PROTOC_BINARIES OFF)
+-elseif(CMAKE_HOST_WIN32 AND NOT VCPKG_TARGET_IS_MINGW AND NOT (VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_IS_UWP))
+-    set(protobuf_BUILD_PROTOC_BINARIES OFF)
+-else()
+-    set(protobuf_BUILD_PROTOC_BINARIES ON)
+-endif()
+-
+-if(NOT protobuf_BUILD_PROTOC_BINARIES AND NOT EXISTS ${CURRENT_INSTALLED_DIR}/../x86-windows/tools/protobuf)
+-    message(FATAL_ERROR "Cross-targetting protobuf requires the x86-windows protoc to be available. Please install protobuf:x86-windows first.")
+-endif()
++set(protobuf_BUILD_PROTOC_BINARIES OFF)
+ 
+ if(VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
+   set(VCPKG_BUILD_SHARED_LIBS ON)

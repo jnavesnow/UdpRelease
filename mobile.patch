@@ -1,0 +1,52 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6cbcd2c..c8287ca 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -167,8 +167,10 @@ function(set_target_common_gns_properties TGT)
+ 
+ 	if(CMAKE_SYSTEM_NAME MATCHES Linux)
+ 		target_compile_definitions(${TGT} PUBLIC POSIX LINUX)
+-	elseif(CMAKE_SYSTEM_NAME MATCHES Darwin)
++	elseif(CMAKE_SYSTEM_NAME MATCHES Darwin OR CMAKE_SYSTEM_NAME MATCHES iOS)
+ 		target_compile_definitions(${TGT} PUBLIC POSIX OSX)
++	elseif(CMAKE_SYSTEM_NAME MATCHES Android)
++		target_compile_definitions(${TGT} PUBLIC POSIX ANDROID)
+ 	elseif(CMAKE_SYSTEM_NAME MATCHES Windows)
+ 		#target_compile_definitions(${TGT} PUBLIC WIN32)
+ 		if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 3b2b123..68faa10 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -254,10 +254,17 @@ macro(gamenetworkingsockets_common GNS_TARGET)
+ 		#if(USE_STEAMWEBRTC AND NOT STEAMWEBRTC_USE_STATIC_LIBS)
+ 		#	target_link_libraries(${GNS_TARGET} PRIVATE dl)
+ 		#endif()
+-	elseif(CMAKE_SYSTEM_NAME MATCHES Darwin)
++	elseif(CMAKE_SYSTEM_NAME MATCHES Darwin OR CMAKE_SYSTEM_NAME MATCHES iOS)
+ 		#if(USE_STEAMWEBRTC AND NOT STEAMWEBRTC_USE_STATIC_LIBS)
+ 		#	target_link_libraries(${GNS_TARGET} PRIVATE dl)
+ 		#endif()
++	elseif(CMAKE_SYSTEM_NAME MATCHES Android)
++		# required to build tests
++		find_library (android-log-lib log)
++
++		target_link_libraries(${GNS_TARGET} PUBLIC
++			${android-log-lib}
++		)
+ 	elseif(CMAKE_SYSTEM_NAME MATCHES Windows)
+ 		if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+ 			get_target_property(TARGET_TYPE ${GNS_TARGET} TYPE)
+diff --git a/src/tier1/netadr.cpp b/src/tier1/netadr.cpp
+index d530f2f..0eec46f 100644
+--- a/src/tier1/netadr.cpp
++++ b/src/tier1/netadr.cpp
+@@ -315,7 +315,7 @@ size_t netadr_t::ToSockadr(void *addr, size_t addr_size) const
+ 			}
+ 			auto *s = (struct sockaddr_in*)addr;
+ 			s->sin_family = AF_INET;
+-			s->sin_addr.s_addr = BigDWord( INADDR_BROADCAST );
++			s->sin_addr.s_addr = BigDWord( (uint32) INADDR_BROADCAST );
+ 			s->sin_port = BigWord( port );
+ 			struct_size = sizeof(sockaddr_in);
+ 		}
