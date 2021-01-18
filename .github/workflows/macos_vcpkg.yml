@@ -69,6 +69,10 @@ jobs:
       - name: install GameNetworkingSockets (non windows)
         if: "!contains( matrix.os, 'windows')"
         run: |
+          cd $VCPKG_ROOT
+          rm -rf installed
+          rm -rf buildtrees
+
           $VCPKG_ROOT/vcpkg remove gamenetworkingsockets --triplet=${{ matrix.triplet }}
 
           $VCPKG_ROOT/vcpkg --overlay-ports=${{ github.workspace }}/GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets --triplet=${{ matrix.triplet }}
