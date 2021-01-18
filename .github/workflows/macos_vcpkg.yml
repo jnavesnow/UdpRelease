@@ -11,10 +11,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, windows-latest]
         include:
           - os: macos-latest
             triplet: x64-osx
+          - os: windows-latest
+            triplet: x64-windows
 
     env:
       buildDir: '${{ github.workspace }}/build/'
