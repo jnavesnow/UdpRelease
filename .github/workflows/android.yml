@@ -105,7 +105,7 @@ jobs:
 
           cd ${{ github.workspace }}/GameNetworkingSockets
 
-          git apply ../mobile.patch
+          git apply ../mobile_120.patch
 
           %VCPKG_ROOT%/vcpkg install protobuf:x86-windows
 
