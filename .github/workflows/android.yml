@@ -7,18 +7,14 @@ on: [push]
 jobs:
   job:
     name: ${{ matrix.triplet }}-build-rudp-binaries-autocache
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
         include:
-          - os: windows-latest
-            triplet: arm64-android
-          - os: windows-latest
-            triplet: arm-android
-          - os: windows-latest
-            triplet: x86-android
+          - triplet: arm64-android
+          - triplet: arm-android
+          - triplet: x86-android
 
     env:
       buildDir: '${{ github.workspace }}/build/'
