@@ -107,6 +107,12 @@ jobs:
 
           git apply ../mobile_120.patch
 
+          cd %VCPKG_ROOT%
+
+          rmdir /S /Q installed 2> nul
+
+          rmdir /S /Q buildtrees 2> nul
+
           %VCPKG_ROOT%/vcpkg install protobuf:x86-windows
 
           %VCPKG_ROOT%/vcpkg remove gamenetworkingsockets --triplet=${{ matrix.triplet }}
