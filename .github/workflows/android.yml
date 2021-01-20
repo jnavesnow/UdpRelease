@@ -78,28 +78,28 @@ jobs:
           (
             echo set(VCPKG_TARGET_ARCHITECTURE arm64^)
             echo set(VCPKG_CRT_LINKAGE dynamic^)
-            echo set(VCPKG_LIBRARY_LINKAGE dynamic^)
+            echo set(VCPKG_LIBRARY_LINKAGE static^)
             echo set(VCPKG_CMAKE_SYSTEM_NAME Android^)
           ) > %VCPKG_ROOT%/triplets/community/arm64-android.cmake
 
           (
             echo set(VCPKG_TARGET_ARCHITECTURE arm^)
             echo set(VCPKG_CRT_LINKAGE dynamic^)
-            echo set(VCPKG_LIBRARY_LINKAGE dynamic^)
+            echo set(VCPKG_LIBRARY_LINKAGE static^)
             echo set(VCPKG_CMAKE_SYSTEM_NAME Android^)
           ) > %VCPKG_ROOT%/triplets/community/arm-android.cmake
 
           (
             echo set(VCPKG_TARGET_ARCHITECTURE x86^)
             echo set(VCPKG_CRT_LINKAGE dynamic^)
-            echo set(VCPKG_LIBRARY_LINKAGE dynamic^)
+            echo set(VCPKG_LIBRARY_LINKAGE static^)
             echo set(VCPKG_CMAKE_SYSTEM_NAME Android^)
           ) > %VCPKG_ROOT%/triplets/community/x86-android.cmake
 
           (
             echo set(VCPKG_TARGET_ARCHITECTURE x64^)
             echo set(VCPKG_CRT_LINKAGE dynamic^)
-            echo set(VCPKG_LIBRARY_LINKAGE dynamic^)
+            echo set(VCPKG_LIBRARY_LINKAGE static^)
             echo set(VCPKG_CMAKE_SYSTEM_NAME Android^)
           ) > %VCPKG_ROOT%/triplets/community/x64-android.cmake
 
