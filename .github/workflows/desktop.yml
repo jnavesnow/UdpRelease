@@ -11,12 +11,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
         include:
           - os: macos-latest
             triplet: x64-osx
           - os: windows-latest
             triplet: x64-windows
+          - os: ubuntu-latest
+            triplet: x64-linux
 
     env:
       buildDir: '${{ github.workspace }}/build/'
@@ -66,8 +68,24 @@ jobs:
         shell: bash
 
       # Now that vcpkg is installed, it is being used to run with the desired arguments.
-      - name: install GameNetworkingSockets (non windows)
-        if: "!contains( matrix.os, 'windows')"
+      
+      # sometimes the changes for ios are reflected on mac, we don't want that
+      - name: install GameNetworkingSockets (Mac)
+        if: "contains( matrix.os, 'macos')"
+        run: |
+          cd $VCPKG_ROOT
+          rm -rf installed
+          rm -rf buildtrees
+
+          git apply --reverse --reject --whitespace=fix ../fix_ios_protobuf.patch 2>/dev/null
+
+          $VCPKG_ROOT/vcpkg remove gamenetworkingsockets --triplet=${{ matrix.triplet }}
+
+          $VCPKG_ROOT/vcpkg --overlay-ports=${{ github.workspace }}/GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets --triplet=${{ matrix.triplet }}
+        shell: bash
+
+      - name: install GameNetworkingSockets (Ubuntu)
+        if: "contains( matrix.os, 'ubuntu')"
         run: |
           cd $VCPKG_ROOT
           rm -rf installed
@@ -81,6 +99,12 @@ jobs:
       - name: install GameNetworkingSockets (Windows) 
         if: "contains( matrix.os, 'windows')"
         run: |
+          cd %VCPKG_ROOT%
+
+          rmdir /S /Q installed 2> nul
+
+          rmdir /S /Q buildtrees 2> nul
+
           %VCPKG_ROOT%/vcpkg remove gamenetworkingsockets --triplet=${{ matrix.triplet }}
 
           %VCPKG_ROOT%/vcpkg --overlay-ports=${{ github.workspace }}/GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets --triplet=${{ matrix.triplet }}
