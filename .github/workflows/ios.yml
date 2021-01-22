@@ -62,6 +62,7 @@ jobs:
           cd $VCPKG_ROOT
           rm -rf installed
           rm -rf buildtrees
+          
 
           echo "
           set(CMAKE_XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
