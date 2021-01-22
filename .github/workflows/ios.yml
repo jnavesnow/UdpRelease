@@ -62,6 +62,8 @@ jobs:
           cd $VCPKG_ROOT
 
           echo "
+          set(VCPKG_OSX_DEPLOYMENT_TARGET 11.0)
+          set(ENABLE_BITCODE true)
           set(VCPKG_TARGET_ARCHITECTURE arm64)
           set(VCPKG_CRT_LINKAGE static)
           set(VCPKG_LIBRARY_LINKAGE static)
