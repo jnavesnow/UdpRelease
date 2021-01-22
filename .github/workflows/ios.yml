@@ -60,6 +60,8 @@ jobs:
       - name: install GameNetworkingSockets
         run: |
           cd $VCPKG_ROOT
+          rm -rf installed
+          rm -rf buildtrees
 
           echo "
           set(VCPKG_OSX_DEPLOYMENT_TARGET 11.0)
