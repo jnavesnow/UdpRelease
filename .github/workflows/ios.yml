@@ -64,8 +64,11 @@ jobs:
           rm -rf buildtrees
 
           echo "
+          set(CMAKE_XCODE_ATTRIBUTE_ENABLE_BITCODE "YES")
+          set(CMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE "bitcode")
           set(VCPKG_OSX_DEPLOYMENT_TARGET 11.0)
           set(ENABLE_BITCODE true)
+          set(CENABLE_BITCODE "true")
           set(VCPKG_TARGET_ARCHITECTURE arm64)
           set(VCPKG_CRT_LINKAGE static)
           set(VCPKG_LIBRARY_LINKAGE static)
