@@ -68,17 +68,17 @@ jobs:
           set(VCPKG_CMAKE_SYSTEM_NAME iOS)
           " > triplets/community/arm64-ios.cmake
 
-          git apply --reverse --reject --whitespace=fix ../fix_ios_protobuf.patch || true
+          git apply --reverse --reject --whitespace=fix ${{ github.workspace }}/fix_ios_protobuf.patch || true
 
           cd ${{ github.workspace }}/GameNetworkingSockets
 
           brew install protobuf
 
-          git apply --reject --whitespace=fix ../mobile.patch
+          git apply --reject --whitespace=fix ${{ github.workspace }}/mobile_120.patch
 
           cd $VCPKG_ROOT
           
-          git apply --reject --whitespace=fix ../fix_ios_protobuf.patch
+          git apply --reject --whitespace=fix ${{ github.workspace }}/fix_ios_protobuf.patch
 
           $VCPKG_ROOT/vcpkg remove gamenetworkingsockets --triplet=${{ matrix.triplet }}
 
