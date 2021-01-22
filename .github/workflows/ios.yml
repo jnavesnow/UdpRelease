@@ -61,7 +61,14 @@ jobs:
         run: |
           cd $VCPKG_ROOT
 
-          git apply --reverse --reject --whitespace=fix ../fix_ios_protobuf.patch 2>/dev/null
+          echo "
+          set(VCPKG_TARGET_ARCHITECTURE arm64)
+          set(VCPKG_CRT_LINKAGE static)
+          set(VCPKG_LIBRARY_LINKAGE static)
+          set(VCPKG_CMAKE_SYSTEM_NAME iOS)
+          " > triplets/community/arm64-ios.cmake
+
+          git apply --reverse --reject --whitespace=fix ../fix_ios_protobuf.patch || true
 
           cd ${{ github.workspace }}/GameNetworkingSockets
 
@@ -75,7 +82,7 @@ jobs:
 
           $VCPKG_ROOT/vcpkg remove gamenetworkingsockets --triplet=${{ matrix.triplet }}
 
-          $VCPKG_ROOT/vcpkg --overlay-ports=${{ github.workspace }}/GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets --triplet=${{ matrix.triplet }} --debug
+          $VCPKG_ROOT/vcpkg --overlay-ports=${{ github.workspace }}/GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets --triplet=${{ matrix.triplet }}
         shell: bash
         
       - name: upload GameNetworkingSockets 

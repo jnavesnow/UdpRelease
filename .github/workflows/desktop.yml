@@ -77,7 +77,7 @@ jobs:
           rm -rf installed
           rm -rf buildtrees
 
-          git apply --reverse --reject --whitespace=fix ../fix_ios_protobuf.patch 2>/dev/null
+          git apply --reverse --reject --whitespace=fix ../fix_ios_protobuf.patch || true
 
           $VCPKG_ROOT/vcpkg remove gamenetworkingsockets --triplet=${{ matrix.triplet }}
 
