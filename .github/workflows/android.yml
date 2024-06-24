@@ -2,7 +2,9 @@
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 name: build-rudp-binaries-android
-on: [push]
+on:
+  push:
+  workflow_dispatch:   # <-- Add this line to enable manual trigger
 
 jobs:
   job:
